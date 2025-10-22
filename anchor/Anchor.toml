@@ -6,7 +6,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-defiagent = "Count3AcZucFDPSFBAeHkQ6AvttieKUkyJ8HiQGhQwe"
+defiagent = "CwocHLiq7mUfHaS3H2bG7aMzGj9kfLoLEmZrPS6KrnV4"
 
 [registry]
 url = "https://api.apr.dev"

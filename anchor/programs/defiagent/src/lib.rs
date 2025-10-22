@@ -2,7 +2,7 @@
 
 use anchor_lang::prelude::*;
 
-declare_id!("Count3AcZucFDPSFBAeHkQ6AvttieKUkyJ8HiQGhQwe");
+declare_id!("CwocHLiq7mUfHaS3H2bG7aMzGj9kfLoLEmZrPS6KrnV4");
 
 #[program]
 pub mod defiagent {
