@@ -1,0 +1,4 @@
+kamino vault: https://api.kamino.finance/kvaults/HDsayqAsDWy3QvANGqh2yNraqcD8Fnjgh73Mhb3WRS5E/metrics
+kamino borrow: https://api.kamino.finance/kamino-market/7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF/reserves/D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59/metrics/history?env=mainnet-beta&start=2025-10-21&end=2025-10-22&frequency=day
+
+jupiter lend: https://lite-api.jup.ag/lend/v1/earn/tokens
