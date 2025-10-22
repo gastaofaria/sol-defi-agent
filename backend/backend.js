@@ -1,21 +1,21 @@
-const express = require('express')
 const axios = require('axios')
 
-const app = express()
-const PORT = process.env.PORT || 3000
+// Store current protocol and APY
+let currentProtocol = null
+let currentAPY = null
 
-// Middleware
-app.use(express.json())
-
-// Endpoint to compare rates
-app.get('/api/compare-rates', async (req, res) => {
+// Function to fetch and compare rates
+async function fetchAndCompareRates() {
   try {
+    console.log(`[${new Date().toISOString()}] Fetching rates...`)
+
     // Query Jupiter API for USDC lending rate
     const jupiterResponse = await axios.get('https://lite-api.jup.ag/lend/v1/earn/tokens')
     const usdcToken = jupiterResponse.data.find((token) => token.symbol === 'USDC' || token.name.includes('USDC'))
 
     if (!usdcToken) {
-      return res.status(404).json({ error: 'USDC token not found in Jupiter API' })
+      console.error('USDC token not found in Jupiter API')
+      return
     }
 
     const jupiterNaturalApy = usdcToken.supplyRate / 100
@@ -49,22 +49,41 @@ app.get('/api/compare-rates', async (req, res) => {
       totalDifference: Math.abs(jupiterTotalApy - kaminoTotalApy),
     }
 
-    res.json(comparison)
+    // Determine which protocol has higher APY
+    const highestProtocol = jupiterTotalApy > kaminoTotalApy ? 'Jupiter' : 'Kamino'
+    const highestAPY = Math.max(jupiterTotalApy, kaminoTotalApy)
+
+    // Check if we need to swap protocols
+    const previousProtocol = currentProtocol
+    if (currentProtocol !== highestProtocol) {
+      currentProtocol = highestProtocol
+      if (previousProtocol !== null) {
+        console.log(`\n🔄 PROTOCOL SWAP: ${previousProtocol} -> ${currentProtocol}`)
+        console.log(`   Previous APY: ${currentAPY}% | New APY: ${highestAPY}%`)
+      }
+    }
+
+    // Update current APY
+    currentAPY = highestAPY
+
+    console.log('\n=== Rate Comparison ===')
+    console.log('Jupiter:', comparison.jupiter)
+    console.log('Kamino:', comparison.kamino)
+    console.log(`Natural APY Winner: ${comparison.naturalHighest} (difference: ${comparison.naturalDifference.toFixed(2)}%)`)
+    console.log(`Total APY Winner: ${comparison.totalHighest} (difference: ${comparison.totalDifference.toFixed(2)}%)`)
+    console.log('\n📊 Current Status:')
+    console.log(`   Protocol: ${currentProtocol}`)
+    console.log(`   APY: ${currentAPY}%`)
+    console.log('=======================\n')
   } catch (error) {
     console.error('Error fetching rates:', error.message)
-    res.status(500).json({
-      error: 'Failed to fetch rates',
-      details: error.message,
-    })
   }
-})
+}
 
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok' })
-})
+// Fetch rates immediately on startup
+console.log('Starting rate comparison service...')
+fetchAndCompareRates()
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-  console.log(`Compare rates at: http://localhost:${PORT}/api/compare-rates`)
-})
+// Schedule rate fetching every minute (60000ms)
+setInterval(fetchAndCompareRates, 60000)
+console.log('Service will fetch rates every 60 seconds')
