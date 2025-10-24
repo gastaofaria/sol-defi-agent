@@ -1,1 +1,0 @@
-/Users/m4/Documents/development/solana/sol-defi-agent/anchor/target/sbpf-solana-solana/release/libdefiagent.rlib: /Users/m4/Documents/development/solana/sol-defi-agent/anchor/programs/defiagent/src/lib.rs
