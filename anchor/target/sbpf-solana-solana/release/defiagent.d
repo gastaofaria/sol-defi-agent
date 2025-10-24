@@ -1,1 +1,1 @@
-/Users/gastao/Documents/development/solana/defiagent/anchor/target/sbpf-solana-solana/release/defiagent.so: /Users/gastao/Documents/development/solana/defiagent/anchor/programs/defiagent/src/lib.rs
+/Users/m4/Documents/development/solana/sol-defi-agent/anchor/target/sbpf-solana-solana/release/defiagent.so: /Users/m4/Documents/development/solana/sol-defi-agent/anchor/programs/defiagent/src/lib.rs

@@ -1,0 +1,163 @@
+{
+  "address": "AX2te6sLvREGd18cU9cwNFzF1u4sTTxJk5wMrH9cZdDR",
+  "metadata": {
+    "name": "strategy",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "manage strategies"
+  },
+  "instructions": [
+    {
+      "name": "init_strategy",
+      "discriminator": [
+        154,
+        74,
+        215,
+        216,
+        229,
+        204,
+        141,
+        241
+      ],
+      "accounts": [
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "strategy",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "strategy_token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  101,
+                  97,
+                  115,
+                  117,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "backend",
+          "type": "pubkey"
+        },
+        {
+          "name": "registry",
+          "type": "pubkey"
+        },
+        {
+          "name": "split_kamino",
+          "type": "u16"
+        },
+        {
+          "name": "split_jupiter",
+          "type": "u16"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Strategy",
+      "discriminator": [
+        174,
+        110,
+        39,
+        119,
+        82,
+        106,
+        169,
+        102
+      ]
+    }
+  ],
+  "types": [
+    {
+      "name": "Strategy",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "docs": [
+              "The owner of this strategy instance"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "backend",
+            "docs": [
+              "Reference to the backend address that can perform admin operations"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "registry",
+            "docs": [
+              "Reference to the registry program"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "split_kamino",
+            "docs": [
+              "Percentage of funds allocated to Kamino in basis points (e.g., 7000 = 70%)"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "split_jupiter",
+            "docs": [
+              "Percentage of funds allocated to Jupiter liquidity in basis points (e.g., 3000 = 30%)"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "Bump seed for PDA derivation"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ]
+}
