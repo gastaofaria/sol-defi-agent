@@ -608,4 +608,135 @@ describe("agent", () => {
       );
     });
   });
+
+  describe("set_protocol", () => {
+    it("should successfully set protocol to Kamino", async () => {
+      // Get registry state before
+      const registryBefore = await program.account.registry.fetch(registryPda);
+
+      const tx = await program.methods
+        .setProtocol(true)
+        .accounts({
+          signer: wallet.publicKey,
+          registry: registryPda,
+        })
+        .rpc();
+
+      console.log("Set protocol to Kamino transaction signature:", tx);
+
+      // Verify registry state updated
+      const registryAfter = await program.account.registry.fetch(registryPda);
+
+      assert.equal(
+        registryAfter.isKamino,
+        true,
+        "is_kamino should be set to true"
+      );
+
+      assert.isAbove(
+        registryAfter.lastUpdated.toNumber(),
+        registryBefore.lastUpdated.toNumber(),
+        "Last updated timestamp should be updated"
+      );
+    });
+
+    it("should successfully set protocol to Jupiter", async () => {
+      // Get registry state before
+      const registryBefore = await program.account.registry.fetch(registryPda);
+
+      const tx = await program.methods
+        .setProtocol(false)
+        .accounts({
+          signer: wallet.publicKey,
+          registry: registryPda,
+        })
+        .rpc();
+
+      console.log("Set protocol to Jupiter transaction signature:", tx);
+
+      // Verify registry state updated
+      const registryAfter = await program.account.registry.fetch(registryPda);
+
+      assert.equal(
+        registryAfter.isKamino,
+        false,
+        "is_kamino should be set to false"
+      );
+
+      assert.isAtLeast(
+        registryAfter.lastUpdated.toNumber(),
+        registryBefore.lastUpdated.toNumber(),
+        "Last updated timestamp should be at least the same or updated"
+      );
+    });
+
+    it("should fail when non-authority tries to set protocol", async () => {
+      // Create a new keypair that is not the authority
+      const unauthorizedUser = Keypair.generate();
+
+      // Airdrop some SOL to the unauthorized user for transaction fees
+      const airdropSignature = await connection.requestAirdrop(
+        unauthorizedUser.publicKey,
+        LAMPORTS_PER_SOL
+      );
+      await connection.confirmTransaction(airdropSignature);
+
+      try {
+        await program.methods
+          .setProtocol(true)
+          .accounts({
+            signer: unauthorizedUser.publicKey,
+            registry: registryPda,
+          })
+          .signers([unauthorizedUser])
+          .rpc();
+
+        assert.fail("Should have thrown an error");
+      } catch (error) {
+        assert.include(
+          error.message,
+          "UnauthorizedAccess",
+          "Should fail with UnauthorizedAccess error"
+        );
+      }
+    });
+
+    it("should allow toggling protocol multiple times", async () => {
+      // Set to Kamino
+      await program.methods
+        .setProtocol(true)
+        .accounts({
+          signer: wallet.publicKey,
+          registry: registryPda,
+        })
+        .rpc();
+
+      let registry = await program.account.registry.fetch(registryPda);
+      assert.equal(registry.isKamino, true, "Should be set to Kamino");
+
+      // Set to Jupiter
+      await program.methods
+        .setProtocol(false)
+        .accounts({
+          signer: wallet.publicKey,
+          registry: registryPda,
+        })
+        .rpc();
+
+      registry = await program.account.registry.fetch(registryPda);
+      assert.equal(registry.isKamino, false, "Should be set to Jupiter");
+
+      // Set back to Kamino
+      await program.methods
+        .setProtocol(true)
+        .accounts({
+          signer: wallet.publicKey,
+          registry: registryPda,
+        })
+        .rpc();
+
+      registry = await program.account.registry.fetch(registryPda);
+      assert.equal(registry.isKamino, true, "Should be set back to Kamino");
+    });
+  });
 });

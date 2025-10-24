@@ -26,6 +26,10 @@ pub mod agent {
     pub fn withdraw(ctx: Context<Withdraw>, amount: u64) -> Result<()> {
         process_withdraw(ctx, amount)
     }
+
+    pub fn set_protocol(ctx: Context<SetProtocol>, is_kamino: bool) -> Result<()> {
+        process_set_protocol(ctx, is_kamino)
+    }
 }
 
 #[derive(Accounts)]

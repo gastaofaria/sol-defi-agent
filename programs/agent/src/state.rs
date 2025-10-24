@@ -14,6 +14,8 @@ pub struct Registry {
     /// Last updated timestamp
     pub last_updated: i64,
     pub interest_rate: u64,
+    // true: farm Kamino, false: farm Jupiter
+    pub is_kamino: bool,
 }
 
 // Challenge: How would you update the user state to save "all_deposited_assets" and "all_borrowed_assets" to accommodate for several asset listings?
