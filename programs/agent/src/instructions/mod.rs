@@ -6,3 +6,5 @@ pub use withdraw::*;
 pub mod withdraw;
 pub use protocol::*;
 pub mod protocol;
+pub use claim::*;
+pub mod claim;

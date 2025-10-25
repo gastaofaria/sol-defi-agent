@@ -30,6 +30,10 @@ pub mod agent {
     pub fn set_protocol(ctx: Context<SetProtocol>, is_kamino: bool) -> Result<()> {
         process_set_protocol(ctx, is_kamino)
     }
+
+    pub fn claim_rewards(ctx: Context<ClaimRewards>) -> Result<()> {
+        process_claim_rewards(ctx)
+    }
 }
 
 #[derive(Accounts)]
