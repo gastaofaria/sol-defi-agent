@@ -11,6 +11,10 @@ pub struct Registry {
     pub total_deposits: u64,
     /// Current number of deposit shares in the registry
     pub total_deposit_shares: u64,
+    /// Current number of USDC tokens in the registry
+    pub usdc_deposits: u64,
+    /// Current number of CASH tokens in the registry
+    pub cash_deposits: u64,
     /// Last updated timestamp
     pub last_updated: i64,
     pub interest_rate: u64,

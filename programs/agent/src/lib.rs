@@ -34,6 +34,10 @@ pub mod agent {
     pub fn claim_rewards(ctx: Context<ClaimRewards>) -> Result<()> {
         process_claim_rewards(ctx)
     }
+
+    pub fn swap_rewards(ctx: Context<SwapRewards>) -> Result<()> {
+        process_swap_rewards(ctx)
+    }
 }
 
 #[derive(Accounts)]

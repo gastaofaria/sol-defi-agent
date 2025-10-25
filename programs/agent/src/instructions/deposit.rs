@@ -55,6 +55,7 @@ pub fn process_deposit(ctx: Context<Deposit>, amount: u64) -> Result<()> {
     let registry = &mut ctx.accounts.registry;
 
     if registry.total_deposits == 0 {
+        registry.usdc_deposits = amount;
         registry.total_deposits = amount;
         registry.total_deposit_shares = amount;
     }
@@ -67,6 +68,7 @@ pub fn process_deposit(ctx: Context<Deposit>, amount: u64) -> Result<()> {
     user.deposited_usdc += amount;
     user.deposited_usdc_shares += users_shares;
 
+    registry.usdc_deposits += amount;
     registry.total_deposits += amount;
     registry.total_deposit_shares += users_shares;
 
